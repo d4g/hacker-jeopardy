@@ -1,0 +1,254 @@
+{
+  "categories": [
+    {
+      "title": "CYBERSECURITY",
+      "questions": [
+        {
+          "value": 100,
+          "question": "This type of attack attempts to trick users into revealing sensitive information by posing as a trustworthy entity.",
+          "answer": "What is phishing?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Phishing_email_example.png/220px-Phishing_email_example.png"
+          }
+        },
+        {
+          "value": 200,
+          "question": "This type of malware encrypts files and demands ransom for their release.",
+          "answer": "What is ransomware?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/WannaCry_Attack_World_Map.svg/220px-WannaCry_Attack_World_Map.svg.png"
+          }
+        },
+        {
+          "value": 300,
+          "question": "This principle states that access should be granted only at the levels needed to perform required functions.",
+          "answer": "What is least privilege?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Zero_trust_security_model.png/220px-Zero_trust_security_model.png"
+          }
+        },
+        {
+          "value": 400,
+          "question": "This attack attempts to exhaust resources by flooding a system with traffic.",
+          "answer": "What is a DDoS (Distributed Denial of Service) attack?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Distributed_Denial_of_Service_Attack.png/220px-Distributed_Denial_of_Service_Attack.png"
+          }
+        },
+        {
+          "value": 500,
+          "question": "This encryption method uses a pair of keys where one is public and one is private.",
+          "answer": "What is asymmetric encryption?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Public_key_encryption.svg/220px-Public_key_encryption.svg.png"
+          }
+        }
+      ]
+    },
+    {
+      "title": "PROGRAMMING",
+      "questions": [
+        {
+          "value": 100,
+          "question": "This language is often used for web development and includes HTML, CSS, and JavaScript.",
+          "answer": "What is front-end development?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/220px-HTML5_logo_and_wordmark.svg.png"
+          }
+        },
+        {
+          "value": 200,
+          "question": "This programming paradigm uses objects containing data and methods.",
+          "answer": "What is object-oriented programming?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/OOP_Concept_Map.png/220px-OOP_Concept_Map.png"
+          }
+        },
+        {
+          "value": 300,
+          "question": "This Python web framework was named after a famous guitarist.",
+          "answer": "What is Django?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Django_logo.svg/220px-Django_logo.svg.png"
+          }
+        },
+        {
+          "value": 400,
+          "question": "This algorithm design approach breaks down problems into sub-problems and combines their solutions.",
+          "answer": "What is divide and conquer?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/220px-Merge_sort_algorithm_diagram.svg.png"
+          }
+        },
+        {
+          "value": 500,
+          "question": "This is a data structure where elements are processed in 'first in, first out' order.",
+          "answer": "What is a queue?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Data_Queue.svg/220px-Data_Queue.svg.png"
+          }
+        }
+      ]
+    },
+    {
+      "title": "NETWORKING",
+      "questions": [
+        {
+          "value": 100,
+          "question": "This protocol is used to securely browse websites and is indicated by 'https://'.",
+          "answer": "What is HTTPS (Hypertext Transfer Protocol Secure)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Padlock-silver-light.svg/220px-Padlock-silver-light.svg.png"
+          }
+        },
+        {
+          "value": 200,
+          "question": "This technology allows a private network to be extended across a public network.",
+          "answer": "What is a VPN (Virtual Private Network)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/VPN_overview-en.svg/220px-VPN_overview-en.svg.png"
+          }
+        },
+        {
+          "value": 300,
+          "question": "This default gateway device connects a local network to the internet.",
+          "answer": "What is a router?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Router-switch-hub.svg/220px-Router-switch-hub.svg.png"
+          }
+        },
+        {
+          "value": 400,
+          "question": "This IP address range is reserved for private networks.",
+          "answer": "What is 192.168.0.0/16?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Ipv4_address.svg/220px-Ipv4_address.svg.png"
+          }
+        },
+        {
+          "value": 500,
+          "question": "This layer of the OSI model handles routing and forwarding.",
+          "answer": "What is the Network Layer (Layer 3)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/OSI_Model_v1.svg/220px-OSI_Model_v1.svg.png"
+          }
+        }
+      ]
+    },
+    {
+      "title": "HARDWARE",
+      "questions": [
+        {
+          "value": 100,
+          "question": "This component of a computer performs arithmetic and logical operations.",
+          "answer": "What is the CPU (Central Processing Unit)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/CPU_Socket_LGA_775_T.jpg/220px-CPU_Socket_LGA_775_T.jpg"
+          }
+        },
+        {
+          "value": 200,
+          "question": "This type of memory loses its contents when power is turned off.",
+          "answer": "What is volatile memory (RAM)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Swissbit_2GB_PC2-5300U-555.jpg/220px-Swissbit_2GB_PC2-5300U-555.jpg"
+          }
+        },
+        {
+          "value": 300,
+          "question": "This device converts digital signals to analog signals for transmission over telephone lines.",
+          "answer": "What is a modem?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Analogue_modem_-_acoustic_coupler.jpg/220px-Analogue_modem_-_acoustic_coupler.jpg"
+          }
+        },
+        {
+          "value": 400,
+          "question": "This expansion bus standard has largely replaced PCI for connecting GPUs.",
+          "answer": "What is PCI Express (PCIe)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/PCI_Express_Card.jpg/220px-PCI_Express_Card.jpg"
+          }
+        },
+        {
+          "value": 500,
+          "question": "This technology uses multiple antennas at both transmitter and receiver to improve performance.",
+          "answer": "What is MIMO (Multiple-Input Multiple-Output)?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/MIMO2x2.svg/220px-MIMO2x2.svg.png"
+          }
+        }
+      ]
+    },
+    {
+      "title": "TECH HISTORY",
+      "questions": [
+        {
+          "value": 100,
+          "question": "This IBM computer defeated chess champion Garry Kasparov in 1997.",
+          "answer": "What is Deep Blue?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Deep_Blue.jpg/220px-Deep_Blue.jpg"
+          }
+        },
+        {
+          "value": 200,
+          "question": "This company was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in 1976.",
+          "answer": "What is Apple?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/220px-Apple_logo_black.svg.png"
+          }
+        },
+        {
+          "value": 300,
+          "question": "This programming language was created by James Gosling at Sun Microsystems in 1995.",
+          "answer": "What is Java?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Java_programming_language_logo.svg/220px-Java_programming_language_logo.svg.png"
+          }
+        },
+        {
+          "value": 400,
+          "question": "This academic network evolved into what we now know as the Internet.",
+          "answer": "What is ARPANET?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Arpanet_logical_map%2C_march_1977.png/220px-Arpanet_logical_map%2C_march_1977.png"
+          }
+        },
+        {
+          "value": 500,
+          "question": "This mechanical device, designed by Charles Babbage, is considered the first computer concept.",
+          "answer": "What is the Analytical Engine?",
+          "media": {
+            "type": "image",
+            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Analytical_Engine_%28Being_the_portion_of_the_machine_which_contains_the_working_drawings%29.jpg/220px-Analytical_Engine_%28Being_the_portion_of_the_machine_which_contains_the_working_drawings%29.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
