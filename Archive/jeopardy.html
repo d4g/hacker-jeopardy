@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeopardy Game</title>
+  <style>
+    :root {
+      --jeopardy-blue: #060CE9;
+      --jeopardy-yellow: #FFCC00;
+      --correct-green: #28a745;
+      --incorrect-red: #dc3545;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #222;
+      color: white;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: var(--jeopardy-yellow);
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Setup Screen */
+    #setup-screen {
+      background-color: rgba(6, 12, 233, 0.9);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      margin: auto;
+      max-width: 600px;
+    }
+    
+    #setup-screen h2 {
+      color: var(--jeopardy-yellow);
+      margin-bottom: 20px;
+    }
+    
+    #player-setup {
+      margin-bottom: 20px;
+    }
+    
+    #player-setup label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    #player-setup select {
+      padding: 8px 15px;
+      font-size: 1rem;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 200px;
+    }
+    
+    #player-names {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    #player-names input {
+      padding: 8px 15px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    
+    #file-selection {
+      margin-bottom: 20px;
+    }
+    
+    button {
+      background-color: var(--jeopardy-yellow);
+      color: var(--jeopardy-blue);
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background-color: #FFD700;
+      transform: scale(1.05);
+    }
+    
+    /* Game Board */
+    #game-screen {
+      display: none;
+    }
+    
+    #game-board {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-bottom: 20px;
+    }
+    
+    #game-board td {
+      background-color: var(--jeopardy-blue);
+      color: var(--jeopardy-yellow);
+      text-align: center;
+      height: 80px;
+      border: 3px solid #000;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-title {
+      font-size: 0.9rem;
+      height: 60px;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 5px;
+    }
+    
+    .question-tile {
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    .question-tile:hover {
+      background-color: #0001A6;
+      transform: scale(0.98);
+    }
+    
+    .question-tile.answered {
+      background-color: #333;
+      color: #666;
+      cursor: not-allowed;
+    }
+    
+    /* Question Modal */
+    #question-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background-color: var(--jeopardy-blue);
+      color: white;
+      width: 80%;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+    }
+    
+    #question-container {
+      margin-bottom: 30px;
+    }
+    
+    #question-text {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    
+    #media-container {
+      margin: 20px 0;
+      max-width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    #media-container img {
+      max-width: 100%;
+      max-height: 300px;
+      border: 2px solid var(--jeopardy-yellow);
+    }
+    
+    #media-container audio {
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    #answer-container {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+    }
+    
+    #answer-text {
+      font-size: 1.5rem;
+      color: var(--jeopardy-yellow);
+      font-weight: bold;
+    }
+    
+    #buzzer-result {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+    
+    #moderator-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    #correct-btn {
+      background-color: var(--correct-green);
+      color: white;
+    }
+    
+    #incorrect-btn {
+      background-color: var(--incorrect-red);
+      color: white;
+    }
+    
+    /* Score Display */
+    #score-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .player-score {
+      background-color: #333;
+      border-radius: 8px;
+      padding: 15px;
+      min-width: 150px;
+      text-align: center;
+      border-top: 5px solid;
+    }
+    
+    .player-score h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+    
+    .player-score p {
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: bold;
+      color: var(--jeopardy-yellow);
+    }
+    
+    .current-player {
+      box-shadow: 0 0 10px white;
+      transform: scale(1.05);
+    }
+    
+    #game-controls {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .category-title {
+        font-size: 0.8rem;
+      }
+      
+      .question-tile {
+        font-size: 1.2rem;
+      }
+      
+      #question-text {
+        font-size: 1.5rem;
+      }
+      
+      #moderator-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .player-score {
+        min-width: 120px;
+      }
+    }
+    
+    /* Status messages */
+    #status-message {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      border-radius: 5px;
+      display: none;
+    }
+    
+    /* Debug Panel */
+    #debug-panel {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jeopardy!</h1>
+    
+    <!-- Setup Screen -->
+    <div id="setup-screen">
+      <h2>Game Setup</h2>
+      
+      <div id="player-setup">
+        <label for="player-count">Number of Players:</label>
+        <select id="player-count" onchange="initializePlayers()">
+          <option value="1">1 Player</option>
+          <option value="2" selected>2 Players</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+        </select>
+        
+        <div id="player-names">
+          <!-- Player name inputs will be generated here -->
+        </div>
+      </div>
+      
+      <div id="file-selection">
+        <label for="game-file">Select Game Data File:</label>
+        <input type="file" id="game-file" accept=".json">
+      </div>
+      
+      <button id="start-button" onclick="startGame()">Start Game</button>
+    </div>
+    
+    <!-- Game Screen -->
+    <div id="game-screen">
+      <table id="game-board">
+        <!-- Game board will be generated here -->
+      </table>
+      
+      <div id="score-container">
+        <!-- Player scores will be displayed here -->
+      </div>
+      
+      <div id="game-controls">
+        <button id="end-game-btn" onclick="endGame()">End Game</button>
+      </div>
+    </div>
+    
+    <!-- Question Modal -->
+    <div id="question-modal">
+      <div class="modal-content">
+        <div id="question-container">
+          <div id="question-text"></div>
+          <div id="media-container"></div>
+        </div>
+        
+        <div id="buzzer-result"></div>
+        
+        <div id="answer-container">
+          <div id="answer-text"></div>
+        </div>
+        
+        <div id="moderator-controls">
+          <button id="correct-btn">Correct (+)</button>
+          <button id="incorrect-btn">Incorrect (-)</button>
+          <button id="show-answer-btn">Show Answer</button>
+          <button id="close-question-btn">Close</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Status Messages -->
+    <div id="status-message"></div>
+    
+    <!-- Debug Panel -->
+    <div id="debug-panel">
+      <div>Gamepad Status: <span id="gamepad-status">Not detected</span></div>
+    </div>
+  </div>
+  
+  <script>
+    // Game Variables
+    let gameData = null;
+    let players = [];
+    let currentQuestion = null;
+    let currentPlayer = null;
+    let gamepads = {};
+    let buzzerPressed = false;
+    let gamepadLoopActive = false;
+    let answeredQuestions = new Set();
+    
+    // Player Colors
+    const playerColors = ["#FF5733", "#33FF57", "#3357FF", "#F3FF33"];
+    
+    // Initialize the application
+    window.onload = function() {
+      initializePlayers();
+      setupEventListeners();
+      setupGamepadListeners();
+    };
+    
+    // Initialize player input fields based on selected count
+    function initializePlayers() {
+      const playerCount = parseInt(document.getElementById('player-count').value);
+      const playerContainer = document.getElementById('player-names');
+      playerContainer.innerHTML = '';
+      
+      for (let i = 0; i < playerCount; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `player-${i}`;
+        input.placeholder = `Player ${i+1} name`;
+        input.value = `Player ${i+1}`;
+        playerContainer.appendChild(input);
+      }
+    }
+    
+    // Set up event listeners for the game
+    function setupEventListeners() {
+      // Moderator controls
+      document.getElementById('correct-btn').addEventListener('click', () => {
+        awardPoints(true);
+      });
+      
+      document.getElementById('incorrect-btn').addEventListener('click', () => {
+        awardPoints(false);
+      });
+      
+      document.getElementById('show-answer-btn').addEventListener('click', () => {
+        showAnswer();
+      });
+      
+      document.getElementById('close-question-btn').addEventListener('click', () => {
+        closeQuestion();
+      });
+    }
+    
+    // Start the game
+    function startGame() {
+      // Validate game data file
+      const fileInput = document.getElementById('game-file');
+      if (fileInput.files.length === 0) {
+        showStatus("Please select a game data file", "error");
+        return;
+      }
+      
+      // Read the game data file
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        try {
+          gameData = JSON.parse(e.target.result);
+          setupPlayers();
+          initializeBoard();
+          document.getElementById('setup-screen').style.display = 'none';
+          document.getElementById('game-screen').style.display = 'block';
+          updateScores();
+          
+          // For debugging
+          if (localStorage.getItem('jeopardyDebug') === 'true') {
+            document.getElementById('debug-panel').style.display = 'block';
+          }
+        } catch (error) {
+          showStatus("Invalid JSON file: " + error.message, "error");
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+    
+    // Setup player objects from input fields
+    function setupPlayers() {
+      const playerCount = parseInt(document.getElementById('player-count').value);
+      players = [];
+      
+      for (let i = 0; i < playerCount; i++) {
+        const nameInput = document.getElementById(`player-${i}`);
+        players.push({
+          name: nameInput.value || `Player ${i+1}`,
+          score: 0,
+          color: playerColors[i],
+          buzzed: false
+        });
+      }
+    }
+    
+    // Initialize the game board
+    function initializeBoard() {
+      const board = document.getElementById('game-board');
+      board.innerHTML = '';
+      
+      // Create category headers
+      const headerRow = document.createElement('tr');
+      gameData.categories.forEach(category => {
+        const th = document.createElement('td');
+        th.className = 'category-title';
+        th.innerHTML = `<h2>${category.title}</h2>`;
+        headerRow.appendChild(th);
+      });
+      board.appendChild(headerRow);
+      
+      // Create question tiles by value
+      const values = [100, 200, 300, 400, 500];
+      
+      values.forEach(value => {
+        const row = document.createElement('tr');
+        
+        gameData.categories.forEach((category, catIndex) => {
+          const td = document.createElement('td');
+          td.className = 'question-tile';
+          td.dataset.category = catIndex;
+          td.dataset.value = value;
+          td.innerHTML = `<h3>$${value}</h3>`;
+          
+          td.addEventListener('click', () => {
+            const key = `${catIndex}-${value}`;
+            if (!answeredQuestions.has(key)) {
+              showQuestion(catIndex, value);
+            }
+          });
+          
+          row.appendChild(td);
+        });
+        
+        board.appendChild(row);
+      });
+    }
+    
+    // Show a question when a tile is clicked
+    function showQuestion(categoryIndex, value) {
+      const category = gameData.categories[categoryIndex];
+      const questionData = category.questions.find(q => q.value === value);
+      
+      if (!questionData) {
+        showStatus("Question not found!", "error");
+        return;
+      }
+      
+      currentQuestion = {
+        category: categoryIndex,
+        value: value,
+        data: questionData
+      };
+      
+      // Update question display
+      const questionModal = document.getElementById('question-modal');
+      const questionText = document.getElementById('question-text');
+      const mediaContainer = document.getElementById('media-container');
+      const answerContainer = document.getElementById('answer-container');
+      const buzzerResult = document.getElementById('buzzer-result');
+      
+      questionText.textContent = questionData.question;
+      mediaContainer.innerHTML = '';
+      answerContainer.style.display = 'none';
+      buzzerResult.style.display = 'none';
+      
+      // Handle media if present
+      if (questionData.media) {
+        displayMedia(questionData.media);
+      }
+      
+      // Mark question as being viewed
+      const tileKey = `${categoryIndex}-${value}`;
+      
+      // Reset buzzer state
+      resetBuzzerState();
+      
+      // Show the modal
+      questionModal.style.display = 'block';
+      
+      // Start listening for buzzer input
+      startBuzzerDetection();
+    }
+    
+    // Display media (images or audio)
+    function displayMedia(media) {
+      const mediaContainer = document.getElementById('media-container');
+      
+      if (media.type === 'image') {
+        const img = document.createElement('img');
+        img.src = media.src;
+        img.alt = 'Question Image';
+        mediaContainer.appendChild(img);
+      } else if (media.type === 'audio') {
+        const audio = document.createElement('audio');
+        audio.src = media.src;
+        audio.controls = true;
+        audio.autoplay = true;
+        mediaContainer.appendChild(audio);
+      }
+    }
+    
+    // Show the answer
+    function showAnswer() {
+      if (currentQuestion) {
+        const answerContainer = document.getElementById('answer-container');
+        const answerText = document.getElementById('answer-text');
+        
+        answerText.textContent = currentQuestion.data.answer;
+        answerContainer.style.display = 'block';
+      }
+    }
+    
+    // Close the current question
+    function closeQuestion() {
+      if (currentQuestion) {
+        const modal = document.getElementById('question-modal');
+        
+        // Mark the question as answered
+        const tileKey = `${currentQuestion.category}-${currentQuestion.value}`;
+        answeredQuestions.add(tileKey);
+        
+        // Update the tile appearance
+        const tile = document.querySelector(`.question-tile[data-category="${currentQuestion.category}"][data-value="${currentQuestion.value}"]`);
+        if (tile) {
+          tile.classList.add('answered');
+        }
+        
+        // Close the modal
+        modal.style.display = 'none';
+        
+        // Reset the current question
+        currentQuestion = null;
+        resetBuzzerState();
+        stopBuzzerDetection();
+      }
+    }
+    
+    // Award points to the current player
+    function awardPoints(correct) {
+      if (!currentPlayer || !currentQuestion) return;
+      
+      const value = currentQuestion.value;
+      
+      if (correct) {
+        currentPlayer.score += value;
+        showStatus(`${currentPlayer.name} got the correct answer! +$${value}`, "success");
+        closeQuestion();
+      } else {
+        currentPlayer.score -= value;
+        showStatus(`${currentPlayer.name} got the wrong answer! -$${value}`, "error");
+        
+        // Reset buzzer state to allow other players to answer
+        resetBuzzerState();
+        startBuzzerDetection();
+      }
+      
+      updateScores();
+    }
+    
+    // Update score display
+    function updateScores() {
+      const scoreContainer = document.getElementById('score-container');
+      scoreContainer.innerHTML = '';
+      
+      players.forEach(player => {
+        const scoreDiv = document.createElement('div');
+        scoreDiv.className = 'player-score';
+        if (player === currentPlayer) {
+          scoreDiv.classList.add('current-player');
+        }
+        scoreDiv.style.borderColor = player.color;
+        
+        scoreDiv.innerHTML = `
+          <h3>${player.name}</h3>
+          <p>$${player.score}</p>
+        `;
+        
+        scoreContainer.appendChild(scoreDiv);
+      });
+    }
+    
+    // Reset buzzer state
+    function resetBuzzerState() {
+      buzzerPressed = false;
+      currentPlayer = null;
+      players.forEach(player => {
+        player.buzzed = false;
+      });
+      
+      const buzzerResult = document.getElementById('buzzer-result');
+      buzzerResult.style.display = 'none';
+      
+      updateScores();
+    }
+    
+    // Check if all players have buzzed
+    function allPlayersBuzzed() {
+      return players.every(player => player.buzzed);
+    }
+    
+    // Display buzzer result
+    function displayBuzzerResult(player) {
+      const buzzerResult = document.getElementById('buzzer-result');
+      buzzerResult.textContent = `${player.name} buzzed in!`;
+      buzzerResult.style.backgroundColor = player.color;
+      buzzerResult.style.color = getContrastColor(player.color);
+      buzzerResult.style.display = 'block';
+      
+      updateScores();
+    }
+    
+    // Get a contrasting text color (black or white) based on background color
+    function getContrastColor(hexColor) {
+      // Convert hex to RGB
+      const r = parseInt(hexColor.substr(1, 2), 16);
+      const g = parseInt(hexColor.substr(3, 2), 16);
+      const b = parseInt(hexColor.substr(5, 2), 16);
+      
+      // Calculate brightness
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      
+      return brightness > 128 ? '#000000' : '#FFFFFF';
+    }
+    
+    // Show status message
+    function showStatus(message, type = "info") {
+      const statusElement = document.getElementById('status-message');
+      statusElement.textContent = message;
+      
+      // Set color based on message type
+      if (type === "error") {
+        statusElement.style.backgroundColor = "rgba(220, 53, 69, 0.8)";
+      } else if (type === "success") {
+        statusElement.style.backgroundColor = "rgba(40, 167, 69, 0.8)";
+      } else {
+        statusElement.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+      }
+      
+      // Show the message
+      statusElement.style.display = 'block';
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        statusElement.style.display = 'none';
+      }, 3000);
+    }
+    
+    // End the game
+    function endGame() {
+      if (confirm("Are you sure you want to end the game?")) {
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('setup-screen').style.display = 'block';
+        
+        // Reset game state
+        gameData = null;
+        players = [];
+        currentQuestion = null;
+        currentPlayer = null;
+        answeredQuestions = new Set();
+        
+        stopBuzzerDetection();
+      }
+    }
+    
+    // Save game state to local storage
+    function saveGameState() {
+      const gameState = {
+        players: players,
+        answeredQuestions: Array.from(answeredQuestions),
+        gameData: gameData
+      };
+      
+      localStorage.setItem('jeopardyGameState', JSON.stringify(gameState));
+    }
+    
+    // Load game state from local storage
+    function loadGameState() {
+      const savedState = localStorage.getItem('jeopardyGameState');
+      if (savedState) {
+        try {
+          const gameState = JSON.parse(savedState);
+          players = gameState.players;
+          answeredQuestions = new Set(gameState.answeredQuestions);
+          gameData = gameState.gameData;
+          
+          initializeBoard();
+          updateScores();
+          
+          document.getElementById('setup-screen').style.display = 'none';
+          document.getElementById('game-screen').style.display = 'block';
+          
+          return true;
+        } catch (error) {
+          console.error("Error loading game state:", error);
+          return false;
+        }
+      }
+      return false;
+    }
+    
+    // Auto-save game state every 30 seconds
+    setInterval(saveGameState, 30000);
+    
+    // ==========================================
+    // Gamepad / Joystick Integration
+    // ==========================================
+    
+    // Set up gamepad connection detection
+    function setupGamepadListeners() {
+      window.addEventListener("gamepadconnected", function(e) {
+        console.log("Gamepad connected:", e.gamepad.id);
+        gamepads[e.gamepad.index] = e.gamepad;
+        updateGamepadStatus();
+        
+        showStatus(`Gamepad connected: Player ${e.gamepad.index + 1}`, "success");
+      });
+      
+      window.addEventListener("gamepaddisconnected", function(e) {
+        console.log("Gamepad disconnected:", e.gamepad.id);
+        delete gamepads[e.gamepad.index];
+        updateGamepadStatus();
+        
+        showStatus(`Gamepad disconnected: Player ${e.gamepad.index + 1}`, "error");
+      });
+    }
+    
+    // Update gamepad status in debug panel
+    function updateGamepadStatus() {
+      const statusElement = document.getElementById('gamepad-status');
+      const connectedGamepads = Object.keys(gamepads).length;
+      
+      if (connectedGamepads > 0) {
+        statusElement.textContent = `Connected (${connectedGamepads})`;
+        statusElement.style.color = '#28a745';
+      } else {
+        statusElement.textContent = 'Not detected';
+        statusElement.style.color = '#dc3545';
+      }
+    }
+    
+    // Start buzzer detection
+    function startBuzzerDetection() {
+      if (!gamepadLoopActive && currentQuestion) {
+        gamepadLoopActive = true;
+        checkBuzzers();
+      }
+    }
+    
+    // Stop buzzer detection
+    function stopBuzzerDetection() {
+      gamepadLoopActive = false;
+    }
+    
+    // Scan for connected gamepads
+    function scanGamepads() {
+      const detectedGamepads = navigator.getGamepads();
+      
+      for (let i = 0; i < detectedGamepads.length; i++) {
+        if (detectedGamepads[i]) {
+          gamepads[detectedGamepads[i].index] = detectedGamepads[i];
+        }
+      }
+    }
+    
+    // Check buzzers for input
+    function checkBuzzers() {
+      if (!gamepadLoopActive) return;
+      
+      scanGamepads();
+      
+      if (buzzerPressed || !currentQuestion) {
+        requestAnimationFrame(checkBuzzers);
+        return;
+      }
+      
+      for (const gamepadId in gamepads) {
+        const gamepad = gamepads[gamepadId];
+        const playerIndex = parseInt(gamepadId);
+        
+        if (playerIndex >= players.length) continue;
+        
+        // Check if any button is pressed
+        const buttonPressed = gamepad.buttons.some(button => button.pressed);
+        
+        if (buttonPressed && !players[playerIndex].buzzed) {
+          handleBuzz(playerIndex);
+          players[playerIndex].buzzed = true;
+          break;
+        }
+      }
+      
+      requestAnimationFrame(checkBuzzers);
+    }
+    
+    // Handle a player buzzing in
+    function handleBuzz(playerIndex) {
+      if (playerIndex >= 0 && playerIndex < players.length) {
+        buzzerPressed = true;
+        currentPlayer = players[playerIndex];
+        displayBuzzerResult(currentPlayer);
+        
+        // Play buzzer sound
+        playBuzzerSound();
+      }
+    }
+    
+    // Play buzzer sound
+    function playBuzzerSound() {
+      const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT18AAAAAAA==');
+      audio.play().catch(error => {
+        console.log("Audio playback failed:", error);
+      });
+    }
+    
+    // Keyboard controls for testing (without joysticks)
+    document.addEventListener('keydown', function(event) {
+      if (!currentQuestion || buzzerPressed) return;
+      
+      // Numbers 1-4 for players
+      if (event.key >= '1' && event.key <= '4') {
+        const playerIndex = parseInt(event.key) - 1;
+        if (playerIndex < players.length && !players[playerIndex].buzzed) {
+          handleBuzz(playerIndex);
+          players[playerIndex].buzzed = true;
+        }
+      }
+    });
+    
+    // Sample game data for testing
+    function loadSampleData() {
+      gameData = {
+        "categories": [
+          {
+            "title": "HISTORY",
+            "questions": [
+              {
+                "value": 100,
+                "question": "This U.S. president signed the Declaration of Independence.",
+                "answer": "Who is John Adams?",
+                "media": {
+                  "type": "image",
+                  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg/220px-John_Adams%2C_Gilbert_Stuart%2C_c1800_1815.jpg"
+                }
+              },
+              {
+                "value": 200,
+                "question": "This ancient wonder was located in Alexandria, Egypt.",
+                "answer": "What is the Lighthouse of Alexandria?"
+              },
+              {
+                "value": 300,
+                "question": "This year marked the start of World War I.",
+                "answer": "What is 1914?"
+              },
+              {
+                "value": 400,
+                "question": "This civilization built Machu Picchu in Peru.",
+                "answer": "Who are the Incas?"
+              },
+              {
+                "value": 500,
+                "question": "This khan was the founder of the Mongol Empire.",
+                "answer": "Who is Genghis Khan?"
+              }
+            ]
+          },
+          {
+            "title": "SCIENCE",
+            "questions": [
+              {
+                "value": 100,
+                "question": "This is the chemical symbol for gold.",
+                "answer": "What is Au?"
+              },
+              {
+                "value": 200,
+                "question": "This planet is known as the Red Planet.",
+                "answer": "What is Mars?"
+              },
+              {
+                "value": 300,
+                "question": "This scientist formulated the theory of relativity.",
+                "answer": "Who is Albert Einstein?"
+              },
+              {
+                "value": 400,
+                "question": "This is the study of fossils.",
+                "answer": "What is paleontology?"
+              },
+              {
+                "value": 500,
+                "question": "This subatomic particle has a positive charge.",
+                "answer": "What is a proton?"
+              }
+            ]
+          },
+          {
+            "title": "GEOGRAPHY",
+            "questions": [
+              {
+                "value": 100,
+                "question": "This is the largest ocean on Earth.",
+                "answer": "What is the Pacific Ocean?"
+              },
+              {
+                "value": 200,
+                "question": "This is the capital of Australia.",
+                "answer": "What is Canberra?"
+              },
+              {
+                "value": 300,
+                "question": "This mountain is the tallest in the world.",
+                "answer": "What is Mount Everest?"
+              },
+              {
+                "value": 400,
+                "question": "This African country is known as the 'Land of a Thousand Hills'.",
+                "answer": "What is Rwanda?"
+              },
+              {
+                "value": 500,
+                "question": "This strait separates Asia and North America.",
+                "answer": "What is the Bering Strait?"
+              }
+            ]
+          },
+          {
+            "title": "ENTERTAINMENT",
+            "questions": [
+              {
+                "value": 100,
+                "question": "This actor played Iron Man in the Marvel Cinematic Universe.",
+                "answer": "Who is Robert Downey Jr.?"
+              },
+              {
+                "value": 200,
+                "question": "This musical features the songs 'Memory' and 'Mr. Mistoffelees'.",
+                "answer": "What is Cats?"
+              },
+              {
+                "value": 300,
+                "question": "This TV show features the characters Walter White and Jesse Pinkman.",
+                "answer": "What is Breaking Bad?",
+                "media": {
+                  "type": "image",
+                  "src": "https://upload.wikimedia.org/wikipedia/en/6/61/Breaking_Bad_title_card.png"
+                }
+              },
+              {
+                "value": 400,
+                "question": "This 1994 film was directed by Quentin Tarantino and stars John Travolta and Samuel L. Jackson.",
+                "answer": "What is Pulp Fiction?"
+              },
+              {
+                "value": 500,
+                "question": "This band's album 'The Dark Side of the Moon' spent 958 weeks on the Billboard charts.",
+                "answer": "Who is Pink Floyd?"
+              }
+            ]
+          },
+          {
+            "title": "SPORTS",
+            "questions": [
+              {
+                "value": 100,
+                "question": "This sport uses a shuttlecock.",
+                "answer": "What is badminton?"
+              },
+              {
+                "value": 200,
+                "question": "This team has won the most Super Bowls.",
+                "answer": "Who are the New England Patriots and Pittsburgh Steelers (tied)?"
+              },
+              {
+                "value": 300,
+                "question": "This country won the first FIFA World Cup in 1930.",
+                "answer": "What is Uruguay?"
+              },
+              {
+                "value": 400,
+                "question": "This Olympic event combines cross-country skiing and rifle shooting.",
+                "answer": "What is biathlon?"
+              },
+              {
+                "value": 500,
+                "question": "This tennis player has won the most Grand Slam singles titles in men's tennis.",
+                "answer": "Who is Novak Djokovic?"
+              }
+            ]
+          }
+        ]
+      };
+    }
+    
+    // For testing: Load sample data
+    // Uncomment to enable
+    // document.getElementById('game-file').addEventListener('click', function(e) {
+    //   if (confirm("Do you want to load sample game data for testing?")) {
+    //     e.preventDefault();
+    //     loadSampleData();
+    //     document.getElementById('game-file').style.display = 'none';
+    //     const label = document.querySelector('label[for="game-file"]');
+    //     if (label) label.textContent = "Using sample game data";
+    //   }
+    // });
+  </script>
+</body>
+</html>

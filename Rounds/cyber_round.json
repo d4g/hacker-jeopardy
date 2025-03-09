@@ -8,8 +8,8 @@
           "question": "This type of attack attempts to trick users into revealing sensitive information by posing as a trustworthy entity.",
           "answer": "What is phishing?",
           "media": {
-            "type": "image",
-            "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Phishing_email_example.png/220px-Phishing_email_example.png"
+            "type": "audio",
+            "src": "res/jeopardy.m4a"
           }
         },
         {
